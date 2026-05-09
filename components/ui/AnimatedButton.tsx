@@ -1,12 +1,12 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { motion, HTMLMotionProps } from "framer-motion";
 import React from "react";
 
 import { MagneticWrapper } from "@/components/ui/MagneticWrapper";
 
-interface AnimatedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface AnimatedButtonProps extends HTMLMotionProps<"button"> {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "outline" | "ghost";
   className?: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Award, Zap } from "lucide-react";
 
@@ -23,6 +23,8 @@ export const GamificationSystem = () => {
   const [level, setLevel] = useState(1);
   const [achievements, setAchievements] = useState<Achievement[]>(INITIAL_ACHIEVEMENTS);
   const [popup, setPopup] = useState<Achievement | null>(null);
+  
+  const xpRef = useRef(0);
 
   const unlockAchievement = (id: string) => {
     setAchievements((prev) => {
@@ -31,7 +33,10 @@ export const GamificationSystem = () => {
         const updated = [...prev];
         updated[idx].unlockedAt = Date.now();
         setPopup(updated[idx]);
-        setXp((x) => x + 500); // 500 XP per achievement
+        
+        const newXp = xpRef.current + 500;
+        xpRef.current = newXp;
+        setXp(newXp); // 500 XP per achievement
         
         // Hide popup after 4 seconds
         setTimeout(() => setPopup(null), 4000);
@@ -45,26 +50,41 @@ export const GamificationSystem = () => {
     // Unlock welcome immediately
     setTimeout(() => unlockAchievement("welcome"), 1500);
 
+    let throttleTimeout: NodeJS.Timeout | null = null;
+
     const handleScroll = () => {
-      const scrollPos = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const docHeight = document.documentElement.scrollHeight;
-      const scrollPercentage = (scrollPos / (docHeight - windowHeight)) * 100;
+      if (throttleTimeout) return;
 
-      // Base XP from scrolling
-      setXp((prev) => Math.max(prev, Math.floor(scrollPercentage * 10)));
+      throttleTimeout = setTimeout(() => {
+        const scrollPos = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+        const scrollPercentage = (scrollPos / (docHeight - windowHeight)) * 100;
 
-      if (scrollPercentage > 25) unlockAchievement("scroll_25");
-      if (scrollPercentage > 75) unlockAchievement("scroll_75");
+        // Base XP from scrolling
+        const scrollXp = Math.floor(scrollPercentage * 10);
+        if (scrollXp > xpRef.current) {
+          xpRef.current = scrollXp;
+          setXp((prev) => Math.max(prev, scrollXp));
+        }
 
-      const projectsEl = document.getElementById("projects");
-      if (projectsEl && scrollPos + windowHeight > projectsEl.offsetTop) {
-        unlockAchievement("projects");
-      }
+        if (scrollPercentage > 25) unlockAchievement("scroll_25");
+        if (scrollPercentage > 75) unlockAchievement("scroll_75");
+
+        const projectsEl = document.getElementById("projects");
+        if (projectsEl && scrollPos + windowHeight > projectsEl.offsetTop) {
+          unlockAchievement("projects");
+        }
+        
+        throttleTimeout = null;
+      }, 100); // Throttle scroll processing to 100ms
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (throttleTimeout) clearTimeout(throttleTimeout);
+    };
   }, []);
 
   useEffect(() => {

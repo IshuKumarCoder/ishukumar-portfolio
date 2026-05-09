@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { motion, useSpring } from "framer-motion";
 
 export const AnimatedCursor = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -14,7 +13,6 @@ export const AnimatedCursor = () => {
 
   useEffect(() => {
     const mouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
       cursorX.set(e.clientX - 16);
       cursorY.set(e.clientY - 16);
       if (!isVisible) setIsVisible(true);
@@ -23,7 +21,7 @@ export const AnimatedCursor = () => {
     const mouseEnter = () => setIsVisible(true);
     const mouseLeave = () => setIsVisible(false);
 
-    window.addEventListener("mousemove", mouseMove);
+    window.addEventListener("mousemove", mouseMove, { passive: true });
     document.documentElement.addEventListener("mouseenter", mouseEnter);
     document.documentElement.addEventListener("mouseleave", mouseLeave);
 
@@ -37,13 +35,13 @@ export const AnimatedCursor = () => {
         target.closest("a") ||
         target.classList.contains("magnetic")
       ) {
-        setIsHovering(true);
+        setIsHovering((prev) => (prev !== true ? true : prev));
       } else {
-        setIsHovering(false);
+        setIsHovering((prev) => (prev !== false ? false : prev));
       }
     };
 
-    window.addEventListener("mouseover", handleMouseOver);
+    window.addEventListener("mouseover", handleMouseOver, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", mouseMove);

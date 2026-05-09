@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
+import { ParticleBackground } from "@/components/ui/ParticleBackground";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,9 +27,6 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 1,
 };
-
-import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
-import { ParticleBackground } from "@/components/ui/ParticleBackground";
 
 export default function RootLayout({
   children,

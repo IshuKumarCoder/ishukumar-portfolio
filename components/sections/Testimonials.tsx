@@ -41,7 +41,7 @@ export const Testimonials = () => {
           animate={{ x: ["0%", "-50%"] }}
           transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
           className="flex gap-6 px-3"
-          style={{ width: "fit-content" }}
+          style={{ width: "fit-content", willChange: "transform" }}
         >
           {/* Duplicate for seamless loop */}
           {[...TESTIMONIALS, ...TESTIMONIALS].map((testimonial, i) => (

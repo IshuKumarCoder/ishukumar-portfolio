@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export const TiltCard = ({ 
@@ -12,18 +12,30 @@ export const TiltCard = ({
   className?: string; 
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const springConfig = { stiffness: 300, damping: 30, mass: 0.5 };
+  const rotateX = useSpring(y, springConfig);
+  const rotateY = useSpring(x, springConfig);
+
+  const opacity = useTransform([x, y], ([latestX, latestY]: number[]) => {
+    return Math.abs(latestX) + Math.abs(latestY) > 0 ? 0.2 : 0;
+  });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
     const { left, top, width, height } = ref.current.getBoundingClientRect();
-    const x = (e.clientX - left - width / 2) / 15;
-    const y = -(e.clientY - top - height / 2) / 15;
-    setPosition({ x, y });
+    const newX = (e.clientX - left - width / 2) / 15;
+    const newY = -(e.clientY - top - height / 2) / 15;
+    x.set(newX);
+    y.set(newY);
   };
 
   const handleMouseLeave = () => {
-    setPosition({ x: 0, y: 0 });
+    x.set(0);
+    y.set(0);
   };
 
   return (
@@ -31,15 +43,13 @@ export const TiltCard = ({
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      animate={{ rotateX: position.y, rotateY: position.x }}
-      transition={{ type: "spring", stiffness: 300, damping: 30, mass: 0.5 }}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
       className={cn("relative perspective-1000", className)}
-      style={{ transformStyle: "preserve-3d" }}
     >
-      <div 
-        className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 transition-opacity duration-300 pointer-events-none rounded-inherit"
+      <motion.div 
+        className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent transition-opacity duration-300 pointer-events-none rounded-inherit"
         style={{
-          opacity: Math.abs(position.x) + Math.abs(position.y) > 0 ? 0.2 : 0,
+          opacity,
           transform: `translateZ(20px)`
         }}
       />

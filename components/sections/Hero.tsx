@@ -136,6 +136,7 @@ export const Hero = () => {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 1.5 }}
+          style={{ willChange: "transform" }}
           className="w-5 h-8 border-2 border-muted-foreground rounded-full flex justify-center p-1"
         >
           <div className="w-1 h-2 bg-primary rounded-full" />

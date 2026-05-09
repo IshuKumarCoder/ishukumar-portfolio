@@ -17,6 +17,7 @@ export const ProfileCard = () => {
             rotate: [0, 90, 180, 270, 360],
           }}
           transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+          style={{ willChange: "transform, opacity" }}
           className="absolute inset-[-10px] rounded-full bg-gradient-to-tr from-primary via-accent to-purple-600 blur-2xl opacity-60 pointer-events-none"
         />
 
@@ -24,11 +25,13 @@ export const ProfileCard = () => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          style={{ willChange: "transform" }}
           className="absolute inset-[-4px] rounded-full border-2 border-dashed border-primary/40 pointer-events-none"
         />
         <motion.div
           animate={{ rotate: -360 }}
           transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+          style={{ willChange: "transform" }}
           className="absolute inset-[-16px] rounded-full border border-accent/20 pointer-events-none"
         />
 
@@ -46,6 +49,7 @@ export const ProfileCard = () => {
             src="/profile_pic.png"
             alt="Ishu Kumar - Full Stack Developer"
             fill
+            sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover object-top scale-[1.3] hover:scale-[1.4] transition-transform duration-700 ease-out filter contrast-125 saturate-110"
             priority
           />
@@ -58,6 +62,7 @@ export const ProfileCard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, type: "spring" }}
+          style={{ willChange: "transform, opacity" }}
           className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap glass-panel px-4 py-2 rounded-full border border-green-500/30 flex items-center gap-2 shadow-[0_0_20px_rgba(34,197,94,0.3)] z-30"
         >
           <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
@@ -68,6 +73,7 @@ export const ProfileCard = () => {
         <motion.div
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          style={{ willChange: "transform" }}
           className="absolute top-12 -left-6 glass-panel p-3 rounded-2xl border border-primary/30 shadow-lg z-30"
         >
           <Code2 className="text-primary mb-1" size={20} />
@@ -77,6 +83,7 @@ export const ProfileCard = () => {
         <motion.div
           animate={{ y: [0, 15, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          style={{ willChange: "transform" }}
           className="absolute top-32 -right-8 glass-panel p-3 rounded-2xl border border-accent/30 shadow-lg z-30"
         >
           <Sparkles className="text-accent mb-1" size={20} />
@@ -86,6 +93,7 @@ export const ProfileCard = () => {
         <motion.div
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          style={{ willChange: "transform" }}
           className="absolute bottom-24 -left-8 glass-panel p-3 rounded-2xl border border-purple-500/30 shadow-lg z-30"
         >
           <Terminal className="text-purple-400 mb-1" size={20} />

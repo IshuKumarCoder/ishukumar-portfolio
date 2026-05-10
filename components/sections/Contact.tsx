@@ -1,10 +1,43 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, MessageSquare, Send, Github, Linkedin, FileText } from "lucide-react";
+import { Mail, MessageSquare, Send, Github, Linkedin, FileText, CheckCircle2, AlertCircle } from "lucide-react";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 
 export const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    projectType: "Full Stack Development",
+    message: "",
+  });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setStatus("success");
+        setFormData({ name: "", email: "", projectType: "Full Stack Development", message: "" });
+        setTimeout(() => setStatus("idle"), 5000);
+      } else {
+        setStatus("error");
+        setTimeout(() => setStatus("idle"), 5000);
+      }
+    } catch (error) {
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 5000);
+    }
+  };
+
   return (
     <section id="contact" className="py-16 md:py-24 relative">
       <div className="container mx-auto px-4 sm:px-6 md:px-12">
@@ -80,36 +113,48 @@ export const Contact = () => {
             viewport={{ once: true, margin: "-50px" }}
             className="w-full"
           >
-            <form className="glass-panel p-5 sm:p-6 md:p-8 rounded-2xl space-y-4 sm:space-y-6">
+            <form onSubmit={handleSubmit} className="glass-panel p-5 sm:p-6 md:p-8 rounded-2xl space-y-4 sm:space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div className="space-y-1.5 sm:space-y-2">
                   <label className="text-xs sm:text-sm font-medium text-white/70">Name</label>
-                  <input type="text" className="w-full bg-black/50 border border-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white text-sm sm:text-base" placeholder="John Doe" />
+                  <input required type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white text-sm sm:text-base" placeholder="John Doe" />
                 </div>
                 <div className="space-y-1.5 sm:space-y-2">
                   <label className="text-xs sm:text-sm font-medium text-white/70">Email</label>
-                  <input type="email" className="w-full bg-black/50 border border-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white text-sm sm:text-base" placeholder="john@example.com" />
+                  <input required type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white text-sm sm:text-base" placeholder="john@example.com" />
                 </div>
               </div>
               
               <div className="space-y-1.5 sm:space-y-2">
                 <label className="text-xs sm:text-sm font-medium text-white/70">Project Type</label>
-                <select className="w-full bg-black/50 border border-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white appearance-none text-sm sm:text-base">
-                  <option>Full Stack Development</option>
-                  <option>AI Integration</option>
-                  <option>SaaS Development</option>
-                  <option>Other</option>
+                <select value={formData.projectType} onChange={(e) => setFormData({...formData, projectType: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white appearance-none text-sm sm:text-base">
+                  <option value="Full Stack Development">Full Stack Development</option>
+                  <option value="AI Integration">AI Integration</option>
+                  <option value="SaaS Development">SaaS Development</option>
+                  <option value="Other">Other</option>
                 </select>
               </div>
 
               <div className="space-y-1.5 sm:space-y-2">
                 <label className="text-xs sm:text-sm font-medium text-white/70">Message</label>
-                <textarea rows={4} className="w-full bg-black/50 border border-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white resize-none text-sm sm:text-base" placeholder="Tell me about your project..." />
+                <textarea required rows={4} value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white resize-none text-sm sm:text-base" placeholder="Tell me about your project..." />
               </div>
 
-              <AnimatedButton variant="primary" className="w-full flex gap-2 justify-center mt-2">
-                Send Message <Send size={18} className="sm:w-5 sm:h-5" />
+              <AnimatedButton variant="primary" className="w-full flex gap-2 justify-center mt-2" disabled={status === "loading"}>
+                {status === "loading" ? "Sending..." : "Send Message"} <Send size={18} className="sm:w-5 sm:h-5" />
               </AnimatedButton>
+
+              {status === "success" && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 text-green-400 bg-green-400/10 p-3 rounded-lg text-sm mt-4">
+                  <CheckCircle2 size={16} /> Message sent successfully! I'll get back to you soon.
+                </motion.div>
+              )}
+              
+              {status === "error" && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 text-red-400 bg-red-400/10 p-3 rounded-lg text-sm mt-4">
+                  <AlertCircle size={16} /> Something went wrong. Please try again or email me directly.
+                </motion.div>
+              )}
             </form>
           </motion.div>
         </div>

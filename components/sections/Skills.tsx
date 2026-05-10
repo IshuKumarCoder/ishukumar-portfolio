@@ -41,9 +41,39 @@ const SKILL_CATEGORIES = [
   }
 ];
 
+const ICONS = [
+  "/techicons/reactjs.png",
+  "/techicons/nextjs-light.png",
+  "/techicons/typescript.png",
+  "/techicons/javascript.png",
+  "/techicons/html5.png",
+  "/techicons/css3.png",
+  "/techicons/tailwind.png",
+  "/techicons/nodejs-alt.png",
+  "/techicons/java.png",
+  "/techicons/springboot-initializer.png",
+  "/techicons/mongodb.png",
+  "/techicons/azure-sql-db.png",
+  "/techicons/redis.png",
+  "/techicons/aws-light.png",
+  "/techicons/vercel-light.png",
+  "/techicons/git.png",
+  "/techicons/github.png",
+  "/techicons/openai.png",
+  "/techicons/claudecode-color.png",
+  "/techicons/cursor.png",
+  "/techicons/intellij.png",
+  "/techicons/vscode.png",
+  "/techicons/antigravity-color.svg"
+];
+
+const ICONS_SET = [...ICONS, ...ICONS, ...ICONS, ...ICONS];
+const REVERSED_ICONS_SET = [...ICONS].reverse();
+const REVERSED_ICONS_SET_FULL = [...REVERSED_ICONS_SET, ...REVERSED_ICONS_SET, ...REVERSED_ICONS_SET, ...REVERSED_ICONS_SET];
+
 export const Skills = () => {
   return (
-    <section id="skills" className="py-24 bg-black/50 relative border-t border-white/5">
+    <section id="skills" className="py-12 md:py-24 bg-black/50 relative border-t border-white/5">
       <div className="container mx-auto px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -60,17 +90,30 @@ export const Skills = () => {
         </motion.div>
 
         {/* Infinite Scrolling Tech Marquee */}
-        <div className="relative w-full overflow-hidden mb-20 flex bg-white/5 py-4 border-y border-white/10">
-          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-black/80 to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-black/80 to-transparent z-10 pointer-events-none" />
+        <div className="relative w-full overflow-hidden mb-20 flex flex-col gap-6 py-4 border-y border-white/10 bg-black/20">
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
           
-          <div className="flex gap-8 whitespace-nowrap px-4 animate-marquee w-max">
-            {[...SKILL_CATEGORIES.flatMap(c => c.skills), ...SKILL_CATEGORIES.flatMap(c => c.skills)].map((skill, idx) => (
+          {/* Upper Row: Right to Left */}
+          <div className="flex gap-8 whitespace-nowrap px-4 animate-marquee w-max group" style={{ animationDuration: '60s' }}>
+            {ICONS_SET.map((icon, idx) => (
               <div 
-                key={`${skill.name}-${idx}`} 
-                className="flex items-center gap-2 text-lg font-bold text-white/50 hover:text-primary transition-colors cursor-pointer"
+                key={`upper-${idx}`} 
+                className="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 glass-panel p-3 md:p-4 rounded-2xl flex items-center justify-center hover:scale-110 hover:bg-white/10 transition-all cursor-pointer"
               >
-                <span className="text-accent">•</span> {skill.name}
+                <img src={icon} alt="Tech Icon" className={`w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity ${(icon.includes('github') || icon.includes('openai') || icon.includes('cursor')) ? 'invert' : ''}`} />
+              </div>
+            ))}
+          </div>
+
+          {/* Lower Row: Left to Right */}
+          <div className="flex gap-8 whitespace-nowrap px-4 animate-marquee w-max group" style={{ animationDuration: '60s', animationDirection: 'reverse' }}>
+            {REVERSED_ICONS_SET_FULL.map((icon, idx) => (
+              <div 
+                key={`lower-${idx}`} 
+                className="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 glass-panel p-3 md:p-4 rounded-2xl flex items-center justify-center hover:scale-110 hover:bg-white/10 transition-all cursor-pointer"
+              >
+                <img src={icon} alt="Tech Icon" className={`w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity ${(icon.includes('github') || icon.includes('openai') || icon.includes('cursor')) ? 'invert' : ''}`} />
               </div>
             ))}
           </div>
@@ -83,7 +126,7 @@ export const Skills = () => {
               initial={{ opacity: 0, x: idx % 2 === 0 ? -20 : 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              transition={{ duration: 0.2, delay: idx * 0.1 }}
               className="glass-panel p-8 rounded-2xl"
             >
               <h3 className="text-2xl font-bold mb-6 text-primary">{category.title}</h3>

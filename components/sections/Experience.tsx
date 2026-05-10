@@ -29,7 +29,7 @@ const EXPERIENCES = [
 
 export const Experience = () => {
   return (
-    <section id="experience" className="py-24 bg-black/30 relative">
+    <section id="experience" className="py-12 md:py-24 bg-black/30 relative">
       <div className="container mx-auto px-6 md:px-12 max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

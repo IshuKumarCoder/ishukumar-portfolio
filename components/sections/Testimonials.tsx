@@ -26,7 +26,7 @@ const TESTIMONIALS = [
 
 export const Testimonials = () => {
   return (
-    <section className="py-24 bg-black/40 border-y border-white/5 overflow-hidden">
+    <section className="py-12 md:py-24 bg-black/40 border-y border-white/5 overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 mb-16">
         <div className="text-center max-w-2xl mx-auto">
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
@@ -36,11 +36,9 @@ export const Testimonials = () => {
       </div>
 
       {/* Auto-scrolling row */}
-      <div className="relative w-full flex overflow-x-hidden">
-        <motion.div
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
-          className="flex gap-6 px-3"
+      <div className="relative w-full flex overflow-x-hidden group">
+        <div
+          className="flex gap-6 px-3 animate-marquee"
           style={{ width: "fit-content", willChange: "transform" }}
         >
           {/* Duplicate for seamless loop */}
@@ -60,7 +58,7 @@ export const Testimonials = () => {
               <p className="text-muted-foreground italic">"{testimonial.content}"</p>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

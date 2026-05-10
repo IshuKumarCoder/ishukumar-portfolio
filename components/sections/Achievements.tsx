@@ -21,7 +21,7 @@ const CERTIFICATIONS = [
 
 export const Achievements = () => {
   return (
-    <section id="achievements" className="py-24 relative overflow-hidden bg-black/40 border-y border-white/5">
+    <section id="achievements" className="py-12 md:py-24 relative overflow-hidden bg-black/40 border-y border-white/5">
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -z-10" />
       
       <div className="container mx-auto px-6 md:px-12">

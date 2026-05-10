@@ -49,7 +49,7 @@ const Counter = ({ end, label }: { end: number, label: string }) => {
 
 export const Freelance = () => {
   return (
-    <section id="freelance" className="py-24 relative overflow-hidden">
+    <section id="freelance" className="py-12 md:py-24 relative overflow-hidden">
       {/* Decorative Background */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[100px] -z-10" />
 

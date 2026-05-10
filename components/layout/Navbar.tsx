@@ -84,14 +84,14 @@ export const Navbar = () => {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden absolute top-full left-0 right-0 glass-panel border-t-0 p-6 flex flex-col gap-4"
+          className="md:hidden absolute top-full left-0 right-0 glass-panel  border-t-0 p-6 flex flex-col gap-4"
         >
           {NAV_LINKS.map((link) => (
             <a
               key={link.name}
               href={link.href}
               onClick={() => setMobileMenuOpen(false)}
-              className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+              className="text-lg  font-medium text-foreground hover:text-primary transition-colors"
             >
               {link.name}
             </a>

@@ -31,7 +31,7 @@ export const Hero = () => {
       {/* 3D Background */}
       <Hero3D />
 
-      <div className="container relative z-10 px-6 md:px-12 grid lg:grid-cols-2 gap-12 items-center">
+      <div className="container relative z-10 py-6 px-6 md:px-12 grid lg:grid-cols-2 gap-12 items-center">
         <div className="flex flex-col items-start gap-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -130,7 +130,7 @@ export const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Scroll</span>
         <motion.div

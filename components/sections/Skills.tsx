@@ -64,6 +64,7 @@ const ICONS = [
   "/techicons/cursor.png",
   "/techicons/intellij.png",
   "/techicons/vscode.png",
+  "/techicons/postman.png",
   "/techicons/antigravity-color.svg"
 ];
 

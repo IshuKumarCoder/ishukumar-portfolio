@@ -8,9 +8,14 @@ export async function POST(req : Request) {
     try{
         await connectDB();
         const { email , password } = await req.json();
-        const admin = await Admin.findOne({email});
+        
+        const trimmedEmail = email.trim();
+        console.log("Login attempt for email:", trimmedEmail);
+        
+        const admin = await Admin.findOne({ email: trimmedEmail });
 
         if(!admin){
+            console.log("Admin not found in DB.");
             return NextResponse.json(
                 {message : "Invalid credentials" },
                 {status : 401 }
@@ -21,6 +26,8 @@ export async function POST(req : Request) {
             password,
             admin.password
         );
+        
+        console.log("Password match result:", isMatch);
 
         if(!isMatch){
             return NextResponse.json(
@@ -31,7 +38,7 @@ export async function POST(req : Request) {
 
         const token = await generateToken({
             id : admin._id,
-            email : admin.eamil,
+            email : admin.email,
         });
 
         const response = NextResponse.json({
@@ -47,10 +54,10 @@ export async function POST(req : Request) {
 
         return response;
     }catch (error){
+        console.error("Login Error:", error);
         return NextResponse.json(
             {message: "Server Error"},
             {status: 500}
         );
     }
-}
- 
+}

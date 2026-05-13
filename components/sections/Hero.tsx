@@ -99,7 +99,7 @@ export const Hero = () => {
               { Icon: Github, href: "https://github.com/IshuKumarCoder" },
               { Icon: Linkedin, href: "https://www.linkedin.com/in/ishu-kumar-460996229/" },
               { Icon: Code, href: "https://leetcode.com/u/ishukumarleet/" }, // Leetcode representation
-              { Icon: ExternalLink, href: "https://mindmagnet.academy/" }
+              { Icon: ExternalLink, href: "https://mind-magnet-three.vercel.app/"}
             ].map((item, i) => (
               <motion.a
                 key={i}

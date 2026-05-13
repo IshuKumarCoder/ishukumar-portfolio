@@ -65,7 +65,10 @@ const ICONS = [
   "/techicons/intellij.png",
   "/techicons/vscode.png",
   "/techicons/postman.png",
-  "/techicons/antigravity-color.svg"
+  "/techicons/antigravity-color.svg",
+  "/techicons/leetcode.png",
+  "/techicons/bootstrap.png",
+  "/techicons/ollama.png",
 ];
 
 const ICONS_SET = [...ICONS, ...ICONS, ...ICONS, ...ICONS];
@@ -96,25 +99,25 @@ export const Skills = () => {
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
           
           {/* Upper Row: Right to Left */}
-          <div className="flex gap-8 whitespace-nowrap px-4 animate-marquee w-max group" style={{ animationDuration: '60s' }}>
+          <div className="flex gap-8 whitespace-nowrap px-4 animate-marquee w-max group" style={{ animationDuration: '120s' }}>
             {ICONS_SET.map((icon, idx) => (
               <div 
                 key={`upper-${idx}`} 
                 className="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 glass-panel p-3 md:p-4 rounded-2xl flex items-center justify-center hover:scale-110 hover:bg-white/10 transition-all cursor-pointer"
               >
-                <img src={icon} alt="Tech Icon" className={`w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity ${(icon.includes('github') || icon.includes('openai') || icon.includes('cursor')) ? 'invert' : ''}`} />
+                <img src={icon} alt="Tech Icon" className={`w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity ${(icon.includes('github')|| icon.includes('ollama') || icon.includes('openai') || icon.includes('cursor')) ? 'invert' : ''}`} />
               </div>
             ))}
           </div>
 
           {/* Lower Row: Left to Right */}
-          <div className="flex gap-8 whitespace-nowrap px-4 animate-marquee w-max group" style={{ animationDuration: '60s', animationDirection: 'reverse' }}>
+          <div className="flex gap-8 whitespace-nowrap px-4 animate-marquee w-max group" style={{ animationDuration: '120s', animationDirection: 'reverse' }}>
             {REVERSED_ICONS_SET_FULL.map((icon, idx) => (
               <div 
                 key={`lower-${idx}`} 
                 className="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 glass-panel p-3 md:p-4 rounded-2xl flex items-center justify-center hover:scale-110 hover:bg-white/10 transition-all cursor-pointer"
               >
-                <img src={icon} alt="Tech Icon" className={`w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity ${(icon.includes('github') || icon.includes('openai') || icon.includes('cursor')) ? 'invert' : ''}`} />
+                <img src={icon} alt="Tech Icon" className={`w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity ${(icon.includes('github') || icon.includes('ollama')|| icon.includes('openai') || icon.includes('cursor')) ? 'invert' : ''}`} />
               </div>
             ))}
           </div>

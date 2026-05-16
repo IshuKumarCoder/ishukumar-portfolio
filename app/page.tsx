@@ -8,18 +8,20 @@ import { Freelance } from "@/components/sections/Freelance";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Contact } from "@/components/sections/Contact";
 
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+
 export default function Home() {
   return (
     <div className="flex flex-col w-full">
       <Hero />
-      <About />
-      <Skills />
-      <Projects />
-      <Experience />
-      <Achievements />
-      <Freelance />
-      <Testimonials />
-      <Contact />
+      <ScrollReveal><About /></ScrollReveal>
+      <ScrollReveal><Skills /></ScrollReveal>
+      <ScrollReveal><Projects /></ScrollReveal>
+      <ScrollReveal><Experience /></ScrollReveal>
+      <ScrollReveal><Achievements /></ScrollReveal>
+      <ScrollReveal><Freelance /></ScrollReveal>
+      <ScrollReveal><Testimonials /></ScrollReveal>
+      <ScrollReveal><Contact /></ScrollReveal>
     </div>
   );
 }

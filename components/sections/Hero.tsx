@@ -16,47 +16,90 @@ const ROLES = [
   "Freelancer"
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: (delayOffset: number) => ({
+    opacity: 1,
+    transition: {
+      delayChildren: delayOffset,
+      staggerChildren: 0.15,
+    },
+  }),
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    filter: "blur(0px)",
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } 
+  },
+};
+
 export const Hero = () => {
   const [currentRole, setCurrentRole] = useState(0);
+  const [delayOffset, setDelayOffset] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+    // Determine delay based on whether the preloader has played in this session
+    const hasLoaded = sessionStorage.getItem("portfolio_loaded");
+    if (!hasLoaded) {
+      setDelayOffset(2.5); // Wait for preloader
+    } else {
+      setDelayOffset(0.1); // Quick load
+    }
+
     const interval = setInterval(() => {
       setCurrentRole((prev) => (prev + 1) % ROLES.length);
     }, 3000);
     return () => clearInterval(interval);
   }, []);
 
+  if (!isMounted) return null; // Prevent hydration mismatch
+
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden" id="home">
       {/* 3D Background */}
       <Hero3D />
 
-      <div className="container relative z-10 py-6 px-6 md:px-12 grid lg:grid-cols-2 gap-12 items-center">
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        custom={delayOffset}
+        className="container relative z-10 py-6 px-6 md:px-12 grid lg:grid-cols-2 gap-12 items-center"
+      >
         <div className="flex flex-col items-start gap-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            variants={itemVariants}
             className="inline-block px-4 py-1.5 rounded-full glass border border-primary/30 text-sm font-medium text-primary mb-2"
           >
             Available for Freelance Work
           </motion.div>
           
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-5xl md:text-7xl font-bold tracking-tight"
+            variants={itemVariants}
+            className="text-5xl md:text-7xl font-bold tracking-tight flex flex-wrap"
           >
-            Hi, I'm <span className="text-gradient">Ishu Kumar</span>
+            <span className="mr-3">Hi, I'm</span> 
+            <span className="text-gradient flex">
+              {"Ishu Kumar".split("").map((char, index) => (
+                <motion.span
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: delayOffset + 0.5 + (index * 0.05), duration: 0.5, ease: "easeOut" }}
+                >
+                  {char === " " ? "\u00A0" : char}
+                </motion.span>
+              ))}
+            </span>
           </motion.h1>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="h-10 overflow-hidden"
-          >
+          <motion.div variants={itemVariants} className="h-10 overflow-hidden">
             <motion.div
               key={currentRole}
               initial={{ y: 40, opacity: 0 }}
@@ -70,35 +113,23 @@ export const Hero = () => {
           </motion.div>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            variants={itemVariants}
             className="text-lg text-muted-foreground max-w-lg"
           >
             I build scalable web applications, AI-integrated systems, and SaaS products. Bridging the gap between creative frontend aesthetics and robust backend architectures.
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-wrap gap-4 mt-4"
-          >
+          <motion.div variants={itemVariants} className="flex flex-wrap gap-4 mt-4">
             <a href="#contact"><AnimatedButton variant="primary">Hire Me</AnimatedButton></a>
             <a href="#projects"><AnimatedButton variant="secondary">View Projects</AnimatedButton></a>
             <a href="/resume/ishu-kumar-(M1).pdf" download><AnimatedButton variant="outline">Download Resume</AnimatedButton></a>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="flex gap-4 mt-6"
-          >
+          <motion.div variants={itemVariants} className="flex gap-4 mt-6">
             {[
               { Icon: Github, href: "https://github.com/IshuKumarCoder" },
               { Icon: Linkedin, href: "https://www.linkedin.com/in/ishu-kumar-460996229/" },
-              { Icon: Code, href: "https://leetcode.com/u/ishukumarleet/" }, // Leetcode representation
+              { Icon: Code, href: "https://leetcode.com/u/ishukumarleet/" },
               { Icon: ExternalLink, href: "https://mind-magnet-three.vercel.app/"}
             ].map((item, i) => (
               <motion.a
@@ -116,20 +147,18 @@ export const Hero = () => {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
+          variants={itemVariants}
           className="hidden lg:block relative w-full flex justify-center items-center"
         >
           <ProfileCard />
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 1 }}
+        transition={{ delay: delayOffset + 1.5, duration: 1 }}
         className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Scroll</span>

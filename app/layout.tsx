@@ -4,7 +4,8 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
-import { ParticleBackground } from "@/components/ui/ParticleBackground";
+import { WaterRippleBackground } from "@/components/ui/WaterRippleBackground";
+import { Preloader } from "@/components/ui/Preloader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,12 +39,14 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-primary/30 selection:text-primary-foreground overflow-x-hidden">
+      {/* Changed overflow-x-hidden to overflow-x-clip to fix CSS position: sticky bug */}
+      <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-primary/30 selection:text-primary-foreground overflow-x-clip">
         <AnimatedCursor />
-        <ParticleBackground />
+        <WaterRippleBackground />
+        <Preloader />
         
         <Navbar />
-        <main className="flex-1 w-full overflow-x-hidden">
+        <main className="flex-1 w-full overflow-x-clip">
           {children}
         </main>
         <Footer />

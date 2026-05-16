@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { useState, useEffect } from "react";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { Hero3D } from "@/components/3d/Hero3D";
@@ -16,7 +16,7 @@ const ROLES = [
   "Freelancer"
 ];
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: (delayOffset: number) => ({
     opacity: 1,
@@ -27,7 +27,7 @@ const containerVariants = {
   }),
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
   visible: { 
     opacity: 1, 

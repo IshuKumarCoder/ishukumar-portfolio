@@ -69,6 +69,8 @@ const ICONS = [
   "/techicons/leetcode.png",
   "/techicons/bootstrap.png",
   "/techicons/ollama.png",
+  "/techicons/apache-tomcat.png",
+  "/techicons/codex-color.png"
 ];
 
 const ICONS_SET = [...ICONS, ...ICONS, ...ICONS, ...ICONS];

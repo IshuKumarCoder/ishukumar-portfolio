@@ -7,7 +7,7 @@ import { OrbitControls, Sphere, MeshDistortMaterial, Float } from "@react-three/
 const AnimatedSphere = () => {
   return (
     <Float speed={2} rotationIntensity={1} floatIntensity={2}>
-      <Sphere visible args={[1, 64, 64]} scale={2}>
+      <Sphere visible args={[1, 32, 32]} scale={2}>
         <MeshDistortMaterial
           color="#8b5cf6"
           attach="material"
@@ -26,7 +26,7 @@ export const Hero3D = () => {
     <div className="absolute inset-0 z-0 opacity-60 pointer-events-none">
       <Canvas 
         camera={{ position: [0, 0, 5], fov: 45 }}
-        dpr={[1, 2]}
+        dpr={[1, 1.25]}
         gl={{ powerPreference: "high-performance", antialias: false, alpha: true }}
       >
         <ambientLight intensity={0.8} />

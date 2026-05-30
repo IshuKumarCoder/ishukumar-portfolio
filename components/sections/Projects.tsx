@@ -35,6 +35,7 @@ const PROJECTS = [
     ],
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "Playwright", "cheerio"],
     github: "https://github.com/IshuKumarCoder/xilvar",
+    demo: "https://xilvar-zeta.vercel.app/",
     imageLink: "/projectimages/xilvar.png",
   },
   {

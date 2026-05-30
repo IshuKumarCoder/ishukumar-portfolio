@@ -42,8 +42,7 @@ export default function RootLayout({
       {/* Changed overflow-x-hidden to overflow-x-clip to fix CSS position: sticky bug */}
       <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-primary/30 selection:text-primary-foreground overflow-x-clip">
         <AnimatedCursor />
-        {/* Temporarily disabled — set to true to re-enable water ripple effect */}
-        {false && <WaterRippleBackground />}
+        <WaterRippleBackground />
         <Preloader />
         
         <Navbar />

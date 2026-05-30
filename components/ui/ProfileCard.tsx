@@ -4,10 +4,11 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { TiltCard } from "./TiltCard";
 import { Code2, Sparkles, Terminal } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export const ProfileCard = () => {
+export const ProfileCard = ({ className }: { className?: string }) => {
   return (
-    <div className="relative w-full max-w-md mx-auto z-10 perspective-1000">
+    <div className={cn("relative w-full max-w-md mx-auto z-10 perspective-1000", className)}>
       <TiltCard className="w-full relative rounded-full">
         {/* Animated Cyberpunk Glow Behind */}
         <motion.div
@@ -74,7 +75,7 @@ export const ProfileCard = () => {
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           style={{ willChange: "transform" }}
-          className="absolute top-12 -left-6 glass-panel p-3 rounded-2xl border border-primary/30 shadow-lg z-30"
+          className="absolute top-8 sm:top-12 left-0 sm:-left-6 glass-panel p-2.5 sm:p-3 rounded-2xl border border-primary/30 shadow-lg z-30"
         >
           <Code2 className="text-primary mb-1" size={20} />
           <div className="text-[10px] font-bold uppercase text-white/80">Java Mastery</div>
@@ -84,7 +85,7 @@ export const ProfileCard = () => {
           animate={{ y: [0, 15, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           style={{ willChange: "transform" }}
-          className="absolute top-32 -right-8 glass-panel p-3 rounded-2xl border border-accent/30 shadow-lg z-30"
+          className="absolute top-24 sm:top-32 right-0 sm:-right-8 glass-panel p-2.5 sm:p-3 rounded-2xl border border-accent/30 shadow-lg z-30"
         >
           <Sparkles className="text-accent mb-1" size={20} />
           <div className="text-[10px] font-bold uppercase text-white/80">AI Architect</div>
@@ -94,7 +95,7 @@ export const ProfileCard = () => {
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
           style={{ willChange: "transform" }}
-          className="absolute bottom-24 -left-8 glass-panel p-3 rounded-2xl border border-purple-500/30 shadow-lg z-30"
+          className="absolute bottom-20 sm:bottom-24 left-0 sm:-left-8 glass-panel p-2.5 sm:p-3 rounded-2xl border border-purple-500/30 shadow-lg z-30"
         >
           <Terminal className="text-purple-400 mb-1" size={20} />
           <div className="text-[10px] font-bold uppercase text-white/80">Next.js Expert</div>

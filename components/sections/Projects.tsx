@@ -13,8 +13,14 @@ type Project = (typeof PROJECTS)[number];
 const PROJECTS = [
   {
     title: "Mind Magnet – AI Learning Platform",
-    description: "A futuristic AI-powered gamified learning platform with dynamic curriculum generation and adaptive learning.",
-    features: ["AI Curriculum Generator", "Dynamic Learning Levels", "Gamification System", "Localized Content"],
+    description:
+      "A futuristic AI-powered gamified learning platform with dynamic curriculum generation and adaptive learning.",
+    features: [
+      "AI Curriculum Generator",
+      "Dynamic Learning Levels",
+      "Gamification System",
+      "Localized Content",
+    ],
     tags: ["Next.js", "TypeScript", "MongoDB", "Tailwind CSS", "AI APIs"],
     github: "https://github.com/IshuKumarCoder/MindMagnet",
     demo: "https://mind-magnet-three.vercel.app/",
@@ -22,16 +28,28 @@ const PROJECTS = [
   },
   {
     title: "Xilvar",
-    description: "A website for scrap the precious metals price form intrenet and show on website in chart format. Also sell the unique coins of gold and silver",
-    features: ["Dynamic Content", "Responsive Design", "Dynamic Precius metals price according to location", "scraping precius metal prices using playwright and cheerio"],
+    description:
+      "A website for scrap the precious metals price form intrenet and show on website in chart format. Also sell the unique coins of gold and silver",
+    features: [
+      "Dynamic Content",
+      "Responsive Design",
+      "Dynamic Precius metals price according to location",
+      "scraping precius metal prices using playwright and cheerio",
+    ],
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "Playwright", "cheerio"],
     github: "https://github.com/IshuKumarCoder/xilvar",
     imageLink: "/projectimages/xilvar.png",
   },
   {
     title: "Marbleliza - Marble Portfolio",
-    description: "Portfolio website for Marbleliza company. Admin can add and remove products and see the requests of customers. Users can request for products and admin will get the request in their dashboard. It is a buisness website for marble company.",
-    features: ["Dynamic Content", "Responsive Design", "Project Showcases", "Client Testimonials"],
+    description:
+      "Portfolio website for Marbleliza company. Admin can add and remove products and see the requests of customers. Users can request for products and admin will get the request in their dashboard. It is a buisness website for marble company.",
+    features: [
+      "Dynamic Content",
+      "Responsive Design",
+      "Project Showcases",
+      "Client Testimonials",
+    ],
     tags: ["Next.js", "TypeScript", "Tailwind CSS"],
     github: "https://github.com/IshuKumarCoder/Marbleliza",
     demo: "https://www.marbleliza.com/",
@@ -39,22 +57,34 @@ const PROJECTS = [
   },
   {
     title: "Car Rental System",
-    description: "A scalable car rental platform with smart filtering and real-time booking workflows.",
-    features: ["JWT Authentication", "Smart Car Search", "Personalized Recommendations", "Real-time Rental Mgmt"],
+    description:
+      "A scalable car rental platform with smart filtering and real-time booking workflows.",
+    features: [
+      "JWT Authentication",
+      "Smart Car Search",
+      "Personalized Recommendations",
+      "Real-time Rental Mgmt",
+    ],
     tags: ["React.js", "Express.js", "Node.js", "MongoDB"],
     github: "https://github.com/IshuKumarCoder",
     imageLink: "/projectimages/carRental.png",
-    demo: "#"
+    demo: "#",
   },
   {
     title: "Smart Contact Management System",
-    description: "A scalable smart contact manager where users can create accounts and manage contacts securely.",
-    features: ["Google & GitHub OAuth", "OTP Authentication", "Secure Dashboard", "Optimized SQL Queries"],
+    description:
+      "A scalable smart contact manager where users can create accounts and manage contacts securely.",
+    features: [
+      "Google & GitHub OAuth",
+      "OTP Authentication",
+      "Secure Dashboard",
+      "Optimized SQL Queries",
+    ],
     tags: ["Java", "Spring Boot", "SQL", "Thymeleaf"],
     github: "https://github.com/IshuKumarCoder",
     imageLink: "/projectimages/smartcon.png",
-    demo: "#"
-  }
+    demo: "#",
+  },
 ];
 
 function ProjectCardContent({ project }: { project: Project }) {
@@ -68,7 +98,7 @@ function ProjectCardContent({ project }: { project: Project }) {
         <div
           className={cn(
             "p-4 sm:p-6 md:p-12 flex-1 flex flex-col justify-between order-2 md:order-1 shrink-0",
-            hasImage && "md:border-r border-white/10"
+            hasImage && "md:border-r border-white/10",
           )}
         >
           <div>
@@ -137,8 +167,14 @@ function ProjectCardContent({ project }: { project: Project }) {
             <div className="w-full relative z-10 pt-2 sm:pt-4 md:pt-6 border-t border-white/10">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 sm:gap-y-3 md:gap-y-4 gap-x-4 md:gap-x-6">
                 {project.features.map((feature) => (
-                  <div key={feature} className="flex items-start gap-2 text-xs sm:text-sm md:text-base text-white/80">
-                    <CheckCircle className="text-primary shrink-0 mt-0.5" size={14} />
+                  <div
+                    key={feature}
+                    className="flex items-start gap-2 text-xs sm:text-sm md:text-base text-white/80"
+                  >
+                    <CheckCircle
+                      className="text-primary shrink-0 mt-0.5"
+                      size={14}
+                    />
                     <span className="leading-snug">{feature}</span>
                   </div>
                 ))}
@@ -174,7 +210,7 @@ function StackedProjectCard({
     <div
       className={cn(
         "sticky w-full flex justify-center",
-        isLast ? "mb-0" : "mb-[42vh] sm:mb-[38vh] lg:mb-[40vh]"
+        isLast ? "mb-0" : "mb-[42vh] sm:mb-[38vh] lg:mb-[40vh]",
       )}
       style={{ top: stickyTop }}
     >
@@ -184,7 +220,7 @@ function StackedProjectCard({
           "w-full max-w-6xl drop-shadow-2xl",
           // Fit stuck card in viewport on phones; scroll inside only if content is taller
           "max-h-[calc(100dvh-4.5rem)] md:max-h-[calc(100dvh-6rem)] lg:max-h-none",
-          "overflow-y-auto overscroll-y-contain lg:overflow-visible"
+          "overflow-y-auto overscroll-y-contain lg:overflow-visible",
         )}
       >
         <ProjectCardContent project={project} />
@@ -202,7 +238,11 @@ export const Projects = () => {
   });
 
   return (
-    <section id="projects" ref={containerRef} className="py-12 md:py-24 relative">
+    <section
+      id="projects"
+      ref={containerRef}
+      className="py-12 md:py-24 relative"
+    >
       <div className="container mx-auto px-4 sm:px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -214,7 +254,8 @@ export const Projects = () => {
             Featured <span className="text-gradient">Projects</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base px-2">
-            A showcase of my recent work, highlighting technical complexity and beautiful design.
+            A showcase of my recent work, highlighting technical complexity and
+            beautiful design.
           </p>
         </motion.div>
 

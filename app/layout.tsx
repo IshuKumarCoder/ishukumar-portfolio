@@ -19,8 +19,16 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Ishu Kumar | Full Stack Java & AI Developer",
-  description: "Modern portfolio of Ishu Kumar. Showcasing expertise in Full Stack Development, Java, Next.js, and Agentic AI Systems.",
-  keywords: ["Ishu Kumar", "Full Stack Developer", "Java Developer", "AI Engineer", "Next.js", "React"],
+  description:
+    "Modern portfolio of Ishu Kumar. Showcasing expertise in Full Stack Development, Java, Next.js, and Agentic AI Systems.",
+  keywords: [
+    "Ishu Kumar",
+    "Full Stack Developer",
+    "Java Developer",
+    "AI Engineer",
+    "Next.js",
+    "React",
+  ],
 };
 
 export const viewport = {
@@ -44,11 +52,9 @@ export default function RootLayout({
         <AnimatedCursor />
         <WaterRippleBackground />
         <Preloader />
-        
+
         <Navbar />
-        <main className="flex-1 w-full overflow-x-clip">
-          {children}
-        </main>
+        <main className="flex-1 w-full overflow-x-clip">{children}</main>
         <Footer />
       </body>
     </html>

@@ -4,8 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
-// WaterRippleBackground temporarily disabled — heavy WebGL/Three.js effect hurts low-end devices
-// import { WaterRippleBackground } from "@/components/ui/WaterRippleBackground";
+import { WaterRippleBackground } from "@/components/ui/WaterRippleBackground";
 import { Preloader } from "@/components/ui/Preloader";
 
 const geistSans = Geist({
@@ -43,11 +42,8 @@ export default function RootLayout({
       {/* Changed overflow-x-hidden to overflow-x-clip to fix CSS position: sticky bug */}
       <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-primary/30 selection:text-primary-foreground overflow-x-clip">
         <AnimatedCursor />
-        {/* Lightweight static background replaces water ripple for better performance */}
-        <div
-          className="fixed inset-0 z-[-1] pointer-events-none bg-gradient-to-b from-[#030305] via-[#0a0a12] to-[#0f172a]"
-          aria-hidden="true"
-        />
+        {/* Temporarily disabled — set to true to re-enable water ripple effect */}
+        {false && <WaterRippleBackground />}
         <Preloader />
         
         <Navbar />

@@ -18,13 +18,13 @@ export const ScrollReveal = ({
 }: ScrollRevealProps) => {
   
   const getVariants = () => {
-    const base = { opacity: 0 };
+    const base = { opacity: 0, filter: "blur(12px)" };
     switch (direction) {
-      case "up": return { hidden: { ...base, y: 40 }, visible: { opacity: 1, y: 0 } };
-      case "down": return { hidden: { ...base, y: -40 }, visible: { opacity: 1, y: 0 } };
-      case "left": return { hidden: { ...base, x: 40 }, visible: { opacity: 1, x: 0 } };
-      case "right": return { hidden: { ...base, x: -40 }, visible: { opacity: 1, x: 0 } };
-      case "none": return { hidden: base, visible: { opacity: 1 } };
+      case "up": return { hidden: { ...base, y: 40 }, visible: { opacity: 1, y: 0, filter: "blur(0px)" } };
+      case "down": return { hidden: { ...base, y: -40 }, visible: { opacity: 1, y: 0, filter: "blur(0px)" } };
+      case "left": return { hidden: { ...base, x: 40 }, visible: { opacity: 1, x: 0, filter: "blur(0px)" } };
+      case "right": return { hidden: { ...base, x: -40 }, visible: { opacity: 1, x: 0, filter: "blur(0px)" } };
+      case "none": return { hidden: base, visible: { opacity: 1, filter: "blur(0px)" } };
     }
   };
 

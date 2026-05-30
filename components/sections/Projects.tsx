@@ -65,7 +65,7 @@ export const Projects = () => {
   });
 
   return (
-    <section id="projects" ref={containerRef} className="pt-12 md:pt-24 pb-6 md:pb-12 relative">
+    <section id="projects" ref={containerRef} className="py-12 md:py-24 relative">
       <div className="container mx-auto px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -82,7 +82,7 @@ export const Projects = () => {
         </motion.div>
 
         {/* The wrapper that contains all sticky cards */}
-        <div className="relative z-10 mt-10 pb-4">
+        <div className="relative z-10 mt-10 pb-0">
           {PROJECTS.map((project, idx) => {
             const total = PROJECTS.length;
             const isLast = idx === total - 1;
@@ -101,14 +101,14 @@ export const Projects = () => {
             return (
               <div 
                 key={project.title} 
-                className={`sticky w-full flex justify-center ${isLast ? "mb-0" : "mb-[12vh] md:mb-[15vh]"}`}
+                className={`sticky w-full flex justify-center ${isLast ? "mb-0" : "mb-[40vh]"}`}
                 style={{ top }}
               >
                 <motion.div
                   style={{ scale, transformOrigin: "top center" }}
                   className="w-full max-w-6xl drop-shadow-2xl"
                 >
-                  <TiltCard className="group rounded-3xl overflow-hidden flex flex-col relative cursor-pointer shadow-2xl border border-white/10 bg-[#0a0a0f]/95 backdrop-blur-md">
+                  <TiltCard className="group rounded-3xl overflow-hidden flex flex-col relative cursor-pointer shadow-2xl border border-white/10 bg-[#0a0a0f]/95 backdrop-blur-2xl">
                     {/* Glowing hover effect */}
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     
@@ -148,7 +148,7 @@ export const Projects = () => {
                       {(project as any).imageLink && (
                         <div className="w-full md:w-[50%] lg:w-[55%] p-8 md:p-12 flex flex-col items-center justify-between bg-[#030305] order-1 md:order-2 relative overflow-hidden">
                           {/* Radial glow behind laptop */}
-                          <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/20 blur-[40px] rounded-full pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity duration-700" />
+                          <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/20 blur-[80px] rounded-full pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity duration-700" />
                           
                           {/* Pure CSS Laptop Mockup */}
                           <div className="w-full max-w-[18rem] sm:max-w-md lg:max-w-lg relative z-10 group-hover:-translate-y-2 transition-transform duration-500 mb-10">

@@ -74,9 +74,9 @@ export const AnimatedCursor = () => {
         }}
         transition={{ type: "spring", stiffness: 300, damping: 25, mass: 0.5 }}
       />
-      {/* Outer Glow — reduced blur for lower GPU cost */}
+      {/* Outer Glow */}
       <motion.div
-        className="fixed top-0 left-0 w-24 h-24 -ml-10 -mt-10 rounded-full pointer-events-none z-[99] blur-xl opacity-20 hidden md:block"
+        className="fixed top-0 left-0 w-32 h-32 -ml-12 -mt-12 rounded-full pointer-events-none z-[99] blur-3xl opacity-30 hidden md:block"
         style={{
           x: cursorX,
           y: cursorY,

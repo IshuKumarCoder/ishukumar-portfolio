@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Code2, Cpu, Globe, Rocket, Server, Smartphone } from "lucide-react";
+import { Code2, Cpu, Globe, Rocket, Server, Workflow } from "lucide-react";
 
 const HIGHLIGHTS = [
   { icon: Globe, title: "Full Stack Development", desc: "End-to-end web applications with modern frameworks." },
@@ -9,7 +9,7 @@ const HIGHLIGHTS = [
   { icon: Rocket, title: "SaaS Development", desc: "Scalable architecture for modern software services." },
   { icon: Server, title: "REST API Development", desc: "Robust and secure backend systems." },
   { icon: Code2, title: "Modern UI/UX", desc: "Beautiful, intuitive, and conversion-focused designs." },
-  { icon: Smartphone, title: "Responsive Design", desc: "Flawless experiences across all devices." },
+  { icon: Workflow, title: "Automate Workflow", desc: "Streamlining processes with intelligent automation and seamless integrations." },
 ];
 
 export const About = () => {

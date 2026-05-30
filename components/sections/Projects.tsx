@@ -1,14 +1,12 @@
 "use client";
 
-import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { ExternalLink, Github, CheckCircle } from "lucide-react";
 import Image from "next/image";
 
 import { TiltCard } from "@/components/ui/TiltCard";
+import ScrollStack, { ScrollStackItem } from "@/components/ui/ScrollStack";
 import { cn } from "@/lib/utils";
-
-type Project = (typeof PROJECTS)[number];
 
 const PROJECTS = [
   {
@@ -87,17 +85,19 @@ const PROJECTS = [
   },
 ];
 
+type Project = (typeof PROJECTS)[number];
+
 function ProjectCardContent({ project }: { project: Project }) {
   const hasImage = Boolean(project.imageLink);
 
   return (
-    <TiltCard className="group rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col relative cursor-pointer shadow-2xl border border-white/10 bg-[#0a0a0f]/95 backdrop-blur-2xl h-full">
+    <TiltCard className="group rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col relative cursor-pointer shadow-2xl border border-white/10 bg-[#0a0a0f]/95 backdrop-blur-2xl w-full">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-      <div className="flex flex-col md:flex-row relative z-10 min-h-0 md:min-h-[500px] h-full">
+      <div className="flex flex-col md:flex-row relative z-10 min-h-0 md:min-h-[480px]">
         <div
           className={cn(
-            "p-4 sm:p-6 md:p-12 flex-1 flex flex-col justify-between order-2 md:order-1 shrink-0",
+            "p-4 sm:p-6 md:p-12 flex-1 flex flex-col justify-between order-2 md:order-1",
             hasImage && "md:border-r border-white/10",
           )}
         >
@@ -145,7 +145,7 @@ function ProjectCardContent({ project }: { project: Project }) {
         </div>
 
         {hasImage && (
-          <div className="w-full md:w-[50%] lg:w-[55%] p-4 sm:p-6 md:p-12 flex flex-col items-center justify-between bg-[#030305] order-1 md:order-2 relative overflow-hidden shrink-0">
+          <div className="w-full md:w-[50%] lg:w-[55%] p-4 sm:p-6 md:p-12 flex flex-col items-center justify-between bg-[#030305] order-1 md:order-2 relative overflow-hidden">
             <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/20 blur-[80px] rounded-full pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity duration-700" />
 
             <div className="w-full max-w-[11rem] sm:max-w-[14rem] md:max-w-md lg:max-w-lg relative z-10 group-hover:-translate-y-2 transition-transform duration-500 mb-3 sm:mb-6 md:mb-10">
@@ -171,10 +171,7 @@ function ProjectCardContent({ project }: { project: Project }) {
                     key={feature}
                     className="flex items-start gap-2 text-xs sm:text-sm md:text-base text-white/80"
                   >
-                    <CheckCircle
-                      className="text-primary shrink-0 mt-0.5"
-                      size={14}
-                    />
+                    <CheckCircle className="text-primary shrink-0 mt-0.5" size={14} />
                     <span className="leading-snug">{feature}</span>
                   </div>
                 ))}
@@ -187,90 +184,44 @@ function ProjectCardContent({ project }: { project: Project }) {
   );
 }
 
-function StackedProjectCard({
-  project,
-  idx,
-  total,
-  scrollYProgress,
-}: {
-  project: Project;
-  idx: number;
-  total: number;
-  scrollYProgress: MotionValue<number>;
-}) {
-  const isLast = idx === total - 1;
-  const start = idx / total;
-  const targetScale = 1 - (total - 1 - idx) * 0.05;
-  const scale = useTransform(scrollYProgress, [start, 1], [1, targetScale]);
-
-  // Navbar (~4rem) + layered offset; fits mobile sticky without clipping
-  const stickyTop = `calc(4rem + ${idx * 14}px)`;
-
-  return (
-    <div
-      className={cn(
-        "sticky w-full flex justify-center",
-        isLast ? "mb-0" : "mb-[42vh] sm:mb-[38vh] lg:mb-[40vh]",
-      )}
-      style={{ top: stickyTop }}
-    >
-      <motion.div
-        style={{ scale, transformOrigin: "top center" }}
-        className={cn(
-          "w-full max-w-6xl drop-shadow-2xl",
-          // Fit stuck card in viewport on phones; scroll inside only if content is taller
-          "max-h-[calc(100dvh-4.5rem)] md:max-h-[calc(100dvh-6rem)] lg:max-h-none",
-          "overflow-y-auto overscroll-y-contain lg:overflow-visible",
-        )}
-      >
-        <ProjectCardContent project={project} />
-      </motion.div>
-    </div>
-  );
-}
+const STACK_ITEM_CLASS =
+  "h-auto min-h-0 my-0 p-0 rounded-none shadow-none bg-transparent max-w-6xl mx-auto w-full";
 
 export const Projects = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
   return (
-    <section
-      id="projects"
-      ref={containerRef}
-      className="py-12 md:py-24 relative"
-    >
+    <section id="projects" className="py-12 md:py-24 relative">
       <div className="container mx-auto px-4 sm:px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-10 sm:mb-16 md:mb-24"
+          className="text-center mb-6 sm:mb-10 md:mb-16"
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
             Featured <span className="text-gradient">Projects</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base px-2">
-            A showcase of my recent work, highlighting technical complexity and
-            beautiful design.
+            A showcase of my recent work, highlighting technical complexity and beautiful design.
           </p>
         </motion.div>
-
-        <div className="relative z-10 mt-6 sm:mt-10 pb-0">
-          {PROJECTS.map((project, idx) => (
-            <StackedProjectCard
-              key={project.title}
-              project={project}
-              idx={idx}
-              total={PROJECTS.length}
-              scrollYProgress={scrollYProgress}
-            />
-          ))}
-        </div>
       </div>
+
+      <ScrollStack
+        innerClassName="pt-2 sm:pt-4 pb-[40rem] sm:pb-[46rem] md:pb-[52rem] px-4 sm:px-6 md:px-12 max-w-7xl mx-auto"
+        itemDistance={100}
+        itemStackDistance={30}
+        stackPosition="18%"
+        scaleEndPosition="10%"
+        baseScale={0.88}
+        itemScale={0.035}
+        blurAmount={2}
+      >
+        {PROJECTS.map((project) => (
+          <ScrollStackItem key={project.title} itemClassName={STACK_ITEM_CLASS}>
+            <ProjectCardContent project={project} />
+          </ScrollStackItem>
+        ))}
+      </ScrollStack>
     </section>
   );
 };

@@ -20,7 +20,7 @@ export default function Home() {
       </section>
       <ScrollReveal><About /></ScrollReveal>
       <ScrollReveal><Skills /></ScrollReveal>
-      <Projects />
+      <ScrollReveal><Projects /></ScrollReveal>
       <ScrollReveal><Experience /></ScrollReveal>
       <ScrollReveal><Achievements /></ScrollReveal>
       <ScrollReveal><Freelance /></ScrollReveal>

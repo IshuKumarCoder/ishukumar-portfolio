@@ -86,7 +86,6 @@ export const Preloader = () => {
               transition={{ delay: 0.8, duration: 0.5 }}
               className="mt-4 text-xs uppercase tracking-[0.3em] text-muted-foreground"
             >
-              Loading Experience
             </motion.div>
           </div>
         </motion.div>

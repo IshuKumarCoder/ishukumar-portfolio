@@ -53,7 +53,6 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   overflow-x: clip;
-  scroll-behavior: smooth;
 }
 
 @media (min-width: 768px) {

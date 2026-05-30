@@ -5,7 +5,6 @@ import { ExternalLink, Github, CheckCircle } from "lucide-react";
 import Image from "next/image";
 
 import { TiltCard } from "@/components/ui/TiltCard";
-import ScrollStack, { ScrollStackItem } from "@/components/ui/ScrollStack";
 import { cn } from "@/lib/utils";
 
 const PROJECTS = [
@@ -171,7 +170,10 @@ function ProjectCardContent({ project }: { project: Project }) {
                     key={feature}
                     className="flex items-start gap-2 text-xs sm:text-sm md:text-base text-white/80"
                   >
-                    <CheckCircle className="text-primary shrink-0 mt-0.5" size={14} />
+                    <CheckCircle
+                      className="text-primary shrink-0 mt-0.5"
+                      size={14}
+                    />
                     <span className="leading-snug">{feature}</span>
                   </div>
                 ))}
@@ -184,9 +186,6 @@ function ProjectCardContent({ project }: { project: Project }) {
   );
 }
 
-const STACK_ITEM_CLASS =
-  "h-auto min-h-0 my-0 p-0 rounded-none shadow-none bg-transparent max-w-6xl mx-auto w-full";
-
 export const Projects = () => {
   return (
     <section id="projects" className="py-12 md:py-24 relative">
@@ -195,33 +194,31 @@ export const Projects = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-6 sm:mb-10 md:mb-16"
+          className="text-center mb-10 sm:mb-12 md:mb-16"
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
             Featured <span className="text-gradient">Projects</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base px-2">
-            A showcase of my recent work, highlighting technical complexity and beautiful design.
+            A showcase of my recent work, highlighting technical complexity and
+            beautiful design.
           </p>
         </motion.div>
-      </div>
 
-      <ScrollStack
-        innerClassName="pt-2 sm:pt-4 pb-[40rem] sm:pb-[46rem] md:pb-[52rem] px-4 sm:px-6 md:px-12 max-w-7xl mx-auto"
-        itemDistance={100}
-        itemStackDistance={30}
-        stackPosition="18%"
-        scaleEndPosition="10%"
-        baseScale={0.88}
-        itemScale={0.035}
-        blurAmount={2}
-      >
-        {PROJECTS.map((project) => (
-          <ScrollStackItem key={project.title} itemClassName={STACK_ITEM_CLASS}>
-            <ProjectCardContent project={project} />
-          </ScrollStackItem>
-        ))}
-      </ScrollStack>
+        <div className="flex flex-col gap-8 sm:gap-10 md:gap-12 max-w-6xl mx-auto">
+          {PROJECTS.map((project, index) => (
+            <motion.div
+              key={project.title}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-5%" }}
+              transition={{ duration: 0.5, delay: index * 0.05 }}
+            >
+              <ProjectCardContent project={project} />
+            </motion.div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 };

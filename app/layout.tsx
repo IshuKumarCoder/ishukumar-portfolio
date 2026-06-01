@@ -29,6 +29,14 @@ export const metadata: Metadata = {
     "Next.js",
     "React",
   ],
+  icons: {
+    icon: [
+      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    apple: "/apple-icon.png",
+    shortcut: "/favicon.png",
+  },
 };
 
 export const viewport = {

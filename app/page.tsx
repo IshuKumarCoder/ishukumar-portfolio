@@ -6,7 +6,7 @@ import { Projects } from "@/components/sections/Projects";
 import { Experience } from "@/components/sections/Experience";
 import { Achievements } from "@/components/sections/Achievements";
 import { Freelance } from "@/components/sections/Freelance";
-import { Testimonials } from "@/components/sections/Testimonials";
+import { Certificates } from "@/components/sections/Certificates";
 import { Contact } from "@/components/sections/Contact";
 
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -24,7 +24,7 @@ export default function Home() {
       <ScrollReveal><Experience /></ScrollReveal>
       <ScrollReveal><Achievements /></ScrollReveal>
       <ScrollReveal><Freelance /></ScrollReveal>
-      <ScrollReveal><Testimonials /></ScrollReveal>
+      <ScrollReveal><Certificates /></ScrollReveal>
       <ScrollReveal><Contact /></ScrollReveal>
     </div>
   );

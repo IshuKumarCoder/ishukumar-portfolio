@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, MessageSquare, Send, Github, Linkedin, FileText, CheckCircle2, AlertCircle } from "lucide-react";
+import { Mail, MessageSquare, Phone, Send, Github, Linkedin, Code, Terminal, Braces, FileText, CheckCircle2, AlertCircle } from "lucide-react";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 
 export const Contact = () => {
@@ -76,14 +76,24 @@ export const Contact = () => {
                     <div className="truncate text-xs sm:text-sm">ishukumarishu786@gmail.com</div>
                   </div>
                 </a>
+
+                <a href="tel:+918360425060" className="flex items-center gap-3 sm:gap-4 text-muted-foreground hover:text-primary transition-colors group">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary/10 group-hover:neon-shadow transition-all shrink-0">
+                    <Phone size={18} className="sm:w-5 sm:h-5" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-foreground text-sm sm:text-base">Phone</div>
+                    <div className="text-xs sm:text-sm">+91 83604 25060</div>
+                  </div>
+                </a>
                 
-                <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="flex items-center gap-3 sm:gap-4 text-muted-foreground hover:text-primary transition-colors group">
+                <a href="https://wa.me/918360425060" target="_blank" rel="noreferrer" className="flex items-center gap-3 sm:gap-4 text-muted-foreground hover:text-primary transition-colors group">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary/10 group-hover:neon-shadow transition-all shrink-0">
                     <MessageSquare size={18} className="sm:w-5 sm:h-5" />
                   </div>
                   <div>
                     <div className="font-medium text-foreground text-sm sm:text-base">WhatsApp</div>
-                    <div className="text-xs sm:text-sm">Contact Me</div>
+                    <div className="text-xs sm:text-sm">+91 83604 25060</div>
                   </div>
                 </a>
               </div>
@@ -91,13 +101,62 @@ export const Contact = () => {
               <div className="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-white/10">
                 <h4 className="font-medium mb-3 sm:mb-4 text-sm sm:text-base">Social Profiles</h4>
                 <div className="flex flex-wrap gap-3 sm:gap-4">
-                  <a href="https://github.com/IshuKumarCoder" target="_blank" rel="noreferrer" className="p-2.5 sm:p-3 bg-white/5 rounded-xl hover:bg-primary/20 hover:text-primary transition-colors">
+                  <a
+                    href="https://github.com/IshuKumarCoder"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="GitHub"
+                    title="GitHub"
+                    className="p-2.5 sm:p-3 bg-white/5 rounded-xl hover:bg-primary/20 hover:text-primary transition-colors"
+                  >
                     <Github size={18} className="sm:w-5 sm:h-5" />
                   </a>
-                  <a href="https://www.linkedin.com/in/ishu-kumar-460996229/" target="_blank" rel="noreferrer" className="p-2.5 sm:p-3 bg-white/5 rounded-xl hover:bg-primary/20 hover:text-primary transition-colors">
+                  <a
+                    href="https://www.linkedin.com/in/ishu-kumar-460996229/"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="LinkedIn"
+                    title="LinkedIn"
+                    className="p-2.5 sm:p-3 bg-white/5 rounded-xl hover:bg-primary/20 hover:text-primary transition-colors"
+                  >
                     <Linkedin size={18} className="sm:w-5 sm:h-5" />
                   </a>
-                  <a href="/resume/ishu-kumar-(M1).pdf" target="_blank" rel="noreferrer" className="p-2.5 sm:p-3 bg-white/5 rounded-xl hover:bg-primary/20 hover:text-primary transition-colors flex items-center gap-2 text-xs sm:text-sm font-medium pr-4 sm:pr-5">
+                  <a
+                    href="https://leetcode.com/u/ishukumarleet/"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="LeetCode"
+                    title="LeetCode"
+                    className="p-2.5 sm:p-3 bg-white/5 rounded-xl hover:bg-primary/20 hover:text-primary transition-colors"
+                  >
+                    <Code size={18} className="sm:w-5 sm:h-5" />
+                  </a>
+                  <a
+                    href="https://www.hackerrank.com/profile/ishukumarishu786"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="HackerRank"
+                    title="HackerRank"
+                    className="p-2.5 sm:p-3 bg-white/5 rounded-xl hover:bg-primary/20 hover:text-primary transition-colors"
+                  >
+                    <Terminal size={18} className="sm:w-5 sm:h-5" />
+                  </a>
+                  <a
+                    href="https://www.naukri.com/code360/profile/Ishukumar"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Code360 by Coding Ninjas"
+                    title="Code360"
+                    className="p-2.5 sm:p-3 bg-white/5 rounded-xl hover:bg-primary/20 hover:text-primary transition-colors"
+                  >
+                    <Braces size={18} className="sm:w-5 sm:h-5" />
+                  </a>
+                  <a
+                    href="/resume/ishu-kumar-(M1).pdf"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-2.5 sm:p-3 bg-white/5 rounded-xl hover:bg-primary/20 hover:text-primary transition-colors flex items-center gap-2 text-xs sm:text-sm font-medium pr-4 sm:pr-5"
+                  >
                     <FileText size={18} className="sm:w-5 sm:h-5" />
                     Resume
                   </a>

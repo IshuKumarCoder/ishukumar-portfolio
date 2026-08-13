@@ -4,11 +4,19 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { TiltCard } from "./TiltCard";
 import { Code2, Sparkles, Terminal } from "lucide-react";
-import { cn } from "@/lib/utils";
 
-export const ProfileCard = ({ className }: { className?: string }) => {
+type ProfileCardProps = {
+  /** Tighter layout for the mobile section between Hero and About */
+  compact?: boolean;
+};
+
+export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
   return (
-    <div className={cn("relative w-full max-w-md mx-auto z-10 perspective-1000", className)}>
+    <div
+      className={`relative w-full mx-auto z-10 perspective-1000 ${
+        compact ? "max-w-full" : "max-w-md"
+      }`}
+    >
       <TiltCard className="w-full relative rounded-full">
         {/* Animated Cyberpunk Glow Behind */}
         <motion.div
@@ -75,30 +83,42 @@ export const ProfileCard = ({ className }: { className?: string }) => {
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           style={{ willChange: "transform" }}
-          className="absolute top-8 sm:top-12 left-0 sm:-left-6 glass-panel p-2.5 sm:p-3 rounded-2xl border border-primary/30 shadow-lg z-30"
+          className={`absolute glass-panel p-2 sm:p-3 rounded-2xl border border-primary/30 shadow-lg z-30 ${
+            compact
+              ? "top-6 left-0 sm:top-12 sm:-left-4"
+              : "top-12 -left-6"
+          }`}
         >
-          <Code2 className="text-primary mb-1" size={20} />
-          <div className="text-[10px] font-bold uppercase text-white/80">Java Mastery</div>
+          <Code2 className="text-primary mb-1" size={compact ? 16 : 20} />
+          <div className="text-[9px] sm:text-[10px] font-bold uppercase text-white/80">Java Mastery</div>
         </motion.div>
 
         <motion.div
           animate={{ y: [0, 15, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           style={{ willChange: "transform" }}
-          className="absolute top-24 sm:top-32 right-0 sm:-right-8 glass-panel p-2.5 sm:p-3 rounded-2xl border border-accent/30 shadow-lg z-30"
+          className={`absolute glass-panel p-2 sm:p-3 rounded-2xl border border-accent/30 shadow-lg z-30 ${
+            compact
+              ? "top-20 right-0 sm:top-32 sm:-right-6"
+              : "top-32 -right-8"
+          }`}
         >
-          <Sparkles className="text-accent mb-1" size={20} />
-          <div className="text-[10px] font-bold uppercase text-white/80">AI Architect</div>
+          <Sparkles className="text-accent mb-1" size={compact ? 16 : 20} />
+          <div className="text-[9px] sm:text-[10px] font-bold uppercase text-white/80">AI Architect</div>
         </motion.div>
 
         <motion.div
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
           style={{ willChange: "transform" }}
-          className="absolute bottom-20 sm:bottom-24 left-0 sm:-left-8 glass-panel p-2.5 sm:p-3 rounded-2xl border border-purple-500/30 shadow-lg z-30"
+          className={`absolute glass-panel p-2 sm:p-3 rounded-2xl border border-purple-500/30 shadow-lg z-30 ${
+            compact
+              ? "bottom-20 left-0 sm:bottom-24 sm:-left-6"
+              : "bottom-24 -left-8"
+          }`}
         >
-          <Terminal className="text-purple-400 mb-1" size={20} />
-          <div className="text-[10px] font-bold uppercase text-white/80">Next.js Expert</div>
+          <Terminal className="text-purple-400 mb-1" size={compact ? 16 : 20} />
+          <div className="text-[9px] sm:text-[10px] font-bold uppercase text-white/80">Next.js Expert</div>
         </motion.div>
       </TiltCard>
     </div>

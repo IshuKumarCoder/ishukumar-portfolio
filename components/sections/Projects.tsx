@@ -1,13 +1,23 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { useRef } from "react";
 import { ExternalLink, Github, CheckCircle } from "lucide-react";
 import Image from "next/image";
 
 import { TiltCard } from "@/components/ui/TiltCard";
-import { cn } from "@/lib/utils";
 
-const PROJECTS = [
+type Project = {
+  title: string;
+  description: string;
+  features: string[];
+  tags: string[];
+  github: string;
+  demo?: string;
+  imageLink?: string;
+};
+
+const PROJECTS: Project[] = [
   {
     title: "Mind Magnet – AI Learning Platform",
     description:
@@ -35,7 +45,6 @@ const PROJECTS = [
     ],
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "Playwright", "cheerio"],
     github: "https://github.com/IshuKumarCoder/xilvar",
-    demo: "https://xilvar-zeta.vercel.app/",
     imageLink: "/projectimages/xilvar.png",
   },
   {
@@ -85,138 +94,190 @@ const PROJECTS = [
   },
 ];
 
-type Project = (typeof PROJECTS)[number];
-
 function ProjectCardContent({ project }: { project: Project }) {
   const hasImage = Boolean(project.imageLink);
 
   return (
-    <TiltCard className="group rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col relative cursor-pointer shadow-2xl border border-white/10 bg-[#0a0a0f]/95 backdrop-blur-2xl w-full">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-      <div className="flex flex-col md:flex-row relative z-10 min-h-0 md:min-h-[480px]">
-        <div
-          className={cn(
-            "p-4 sm:p-6 md:p-12 flex-1 flex flex-col justify-between order-2 md:order-1",
-            hasImage && "md:border-r border-white/10",
-          )}
-        >
-          <div>
-            <div className="flex justify-between items-start gap-2 mb-2 sm:mb-4 md:mb-6">
-              <h3 className="text-lg sm:text-2xl md:text-4xl font-bold group-hover:text-primary transition-colors leading-tight">
-                {project.title}
-              </h3>
-              <div className="flex gap-1.5 sm:gap-2 relative z-20 shrink-0">
+    <div className="flex flex-col md:flex-row relative z-10 min-h-0 md:min-h-[500px]">
+      <div
+        className={`p-5 sm:p-8 md:p-12 flex-1 flex flex-col justify-between order-2 md:order-1 ${
+          hasImage ? "md:border-r border-white/10" : ""
+        }`}
+      >
+        <div>
+          <div className="flex justify-between items-start gap-3 mb-4 sm:mb-6">
+            <h3 className="text-xl sm:text-2xl md:text-4xl font-bold group-hover:text-primary transition-colors">
+              {project.title}
+            </h3>
+            <div className="flex gap-2 relative z-20 shrink-0">
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noreferrer"
+                className="p-2 bg-white/5 rounded-full hover:bg-primary transition-colors"
+              >
+                <Github size={20} />
+              </a>
+              {project.demo && project.demo !== "#" && (
                 <a
-                  href={project.github}
+                  href={project.demo}
                   target="_blank"
                   rel="noreferrer"
-                  className="p-1.5 sm:p-2 bg-white/5 rounded-full hover:bg-primary transition-colors"
+                  className="p-2 bg-white/5 rounded-full hover:bg-primary transition-colors"
                 >
-                  <Github size={18} className="sm:w-5 sm:h-5" />
+                  <ExternalLink size={20} />
                 </a>
-                {"demo" in project && project.demo && project.demo !== "#" && (
-                  <a
-                    href={project.demo}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="p-1.5 sm:p-2 bg-white/5 rounded-full hover:bg-primary transition-colors"
-                  >
-                    <ExternalLink size={18} className="sm:w-5 sm:h-5" />
-                  </a>
-                )}
-              </div>
+              )}
             </div>
-            <p className="text-muted-foreground text-sm sm:text-base md:text-xl leading-snug sm:leading-relaxed">
-              {project.description}
-            </p>
           </div>
-
-          <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-4 sm:mt-8 md:mt-12">
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="text-[10px] sm:text-xs md:text-sm font-medium px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-full bg-primary/10 text-primary-foreground border border-primary/20 backdrop-blur-md"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+          <p className="text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed">
+            {project.description}
+          </p>
         </div>
 
-        {hasImage && (
-          <div className="w-full md:w-[50%] lg:w-[55%] p-4 sm:p-6 md:p-12 flex flex-col items-center justify-between bg-[#030305] order-1 md:order-2 relative overflow-hidden">
-            <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/20 blur-[80px] rounded-full pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity duration-700" />
+        <div className="flex flex-wrap gap-2 mt-6 sm:mt-12">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className="text-xs sm:text-sm font-medium px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 text-primary-foreground border border-primary/20 backdrop-blur-md"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
 
-            <div className="w-full max-w-[11rem] sm:max-w-[14rem] md:max-w-md lg:max-w-lg relative z-10 group-hover:-translate-y-2 transition-transform duration-500 mb-3 sm:mb-6 md:mb-10">
-              <div className="relative bg-[#0a0a0f] border-[3px] sm:border-[4px] md:border-[6px] border-[#1a1a24] rounded-t-lg sm:rounded-t-xl rounded-b-sm aspect-video overflow-hidden shadow-2xl">
-                <div className="absolute top-1 left-1/2 -translate-x-1/2 w-1 h-1 sm:w-1.5 sm:h-1.5 bg-[#050508] rounded-full z-20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)]" />
-                <Image
-                  src={project.imageLink!}
-                  alt={project.title}
-                  fill
-                  sizes="(max-width: 768px) 40vw, 50vw"
-                  className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                />
-              </div>
-              <div className="relative w-[116%] -ml-[8%] h-2.5 sm:h-3 md:h-4 bg-gradient-to-b from-[#2a2a35] to-[#1a1a24] rounded-b-lg sm:rounded-b-xl rounded-t-[2px] shadow-[0_12px_24px_rgba(0,0,0,0.8)] md:shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex justify-center border-t border-white/10">
-                <div className="w-1/4 h-1 sm:h-1.5 md:h-2 bg-[#15151e] rounded-b-md shadow-inner" />
-              </div>
+      {hasImage && project.imageLink && (
+        <div className="w-full md:w-[50%] lg:w-[55%] p-5 sm:p-8 md:p-12 flex flex-col items-center justify-between bg-[#030305] order-1 md:order-2 relative overflow-hidden">
+          <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/20 blur-[40px] md:blur-[80px] rounded-full pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity duration-700" />
+
+          <div className="w-full max-w-[14rem] sm:max-w-[18rem] md:max-w-md lg:max-w-lg relative z-10 group-hover:-translate-y-2 transition-transform duration-500 mb-6 sm:mb-10">
+            <div className="relative bg-[#0a0a0f] border-[4px] sm:border-[6px] border-[#1a1a24] rounded-t-xl rounded-b-sm aspect-video overflow-hidden shadow-2xl">
+              <div className="absolute top-1 sm:top-1.5 left-1/2 -translate-x-1/2 w-1 h-1 sm:w-1.5 sm:h-1.5 bg-[#050508] rounded-full z-20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)]" />
+              <Image
+                src={project.imageLink}
+                alt={project.title}
+                fill
+                sizes="(max-width: 768px) 90vw, 50vw"
+                className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+              />
             </div>
-
-            <div className="w-full relative z-10 pt-2 sm:pt-4 md:pt-6 border-t border-white/10">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 sm:gap-y-3 md:gap-y-4 gap-x-4 md:gap-x-6">
-                {project.features.map((feature) => (
-                  <div
-                    key={feature}
-                    className="flex items-start gap-2 text-xs sm:text-sm md:text-base text-white/80"
-                  >
-                    <CheckCircle
-                      className="text-primary shrink-0 mt-0.5"
-                      size={14}
-                    />
-                    <span className="leading-snug">{feature}</span>
-                  </div>
-                ))}
-              </div>
+            <div className="relative w-[116%] -ml-[8%] h-3 sm:h-4 bg-gradient-to-b from-[#2a2a35] to-[#1a1a24] rounded-b-xl rounded-t-[2px] shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex justify-center border-t border-white/10">
+              <div className="w-1/4 h-1.5 sm:h-2 bg-[#15151e] rounded-b-md shadow-inner" />
             </div>
           </div>
-        )}
-      </div>
+
+          <div className="w-full relative z-10 mt-auto pt-4 sm:pt-6 border-t border-white/10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 sm:gap-y-4 gap-x-6">
+              {project.features.map((feature) => (
+                <div
+                  key={feature}
+                  className="flex items-start gap-2 sm:gap-3 text-sm md:text-base text-white/80"
+                >
+                  <CheckCircle className="text-primary shrink-0 mt-0.5" size={18} />
+                  <span>{feature}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ProjectCardShell({ project }: { project: Project }) {
+  return (
+    <TiltCard className="group rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col relative cursor-pointer shadow-2xl border border-white/10 bg-[#0a0a0f]/95 backdrop-blur-2xl">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <ProjectCardContent project={project} />
     </TiltCard>
   );
 }
 
-export const Projects = () => {
+function ProjectStickyCard({
+  project,
+  idx,
+  total,
+  scrollYProgress,
+}: {
+  project: Project;
+  idx: number;
+  total: number;
+  scrollYProgress: MotionValue<number>;
+}) {
+  const isLast = idx === total - 1;
+  const start = idx / total;
+  const targetScale = 1 - (total - 1 - idx) * 0.05;
+  const scale = useTransform(scrollYProgress, [start, 1], [1, targetScale]);
+  const top = `calc(10vh + ${idx * 24}px)`;
+
   return (
-    <section id="projects" className="py-12 md:py-24 relative">
+    <div
+      className={`sticky w-full flex justify-center ${isLast ? "mb-0" : "mb-[35vh] lg:mb-[40vh]"}`}
+      style={{ top }}
+    >
+      <motion.div
+        style={{ scale, transformOrigin: "top center" }}
+        className="w-full max-w-6xl drop-shadow-2xl"
+      >
+        <ProjectCardShell project={project} />
+      </motion.div>
+    </div>
+  );
+}
+
+export const Projects = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  return (
+    <section id="projects" ref={containerRef} className="py-12 md:py-24 relative">
       <div className="container mx-auto px-4 sm:px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-10 sm:mb-12 md:mb-16"
+          className="text-center mb-10 sm:mb-16 md:mb-24"
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
             Featured <span className="text-gradient">Projects</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base px-2">
-            A showcase of my recent work, highlighting technical complexity and
-            beautiful design.
+            A showcase of my recent work, highlighting technical complexity and beautiful design.
           </p>
         </motion.div>
 
-        <div className="flex flex-col gap-8 sm:gap-10 md:gap-12 max-w-6xl mx-auto">
-          {PROJECTS.map((project, index) => (
+        {/* Mobile & tablet: normal vertical scroll (sticky stack breaks on small screens) */}
+        <div className="flex flex-col gap-8 sm:gap-10 md:hidden relative z-10 mt-6">
+          {PROJECTS.map((project) => (
             <motion.div
               key={project.title}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-5%" }}
-              transition={{ duration: 0.5, delay: index * 0.05 }}
+              transition={{ duration: 0.5 }}
+              className="w-full"
             >
-              <ProjectCardContent project={project} />
+              <ProjectCardShell project={project} />
             </motion.div>
+          ))}
+        </div>
+
+        {/* Desktop: sticky card stack */}
+        <div className="relative z-10 mt-10 pb-0 hidden md:block">
+          {PROJECTS.map((project, idx) => (
+            <ProjectStickyCard
+              key={project.title}
+              project={project}
+              idx={idx}
+              total={PROJECTS.length}
+              scrollYProgress={scrollYProgress}
+            />
           ))}
         </div>
       </div>

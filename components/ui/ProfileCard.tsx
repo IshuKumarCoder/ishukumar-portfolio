@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { TiltCard } from "./TiltCard";
-import { Code2, Sparkles, Terminal } from "lucide-react";
+import { Code2, Sparkles, Terminal, VolumeX } from "lucide-react";
 
 const INTRO_VIDEO_SRC = "/introvideo/intro.mp4";
 const PROFILE_POSTER = "/profile_pic.png";
@@ -19,16 +19,31 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
   const mediaRef = useRef<HTMLDivElement>(null);
   const userPausedRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const [isCoarsePointer, setIsCoarsePointer] = useState(false);
 
   const playVideo = useCallback(async () => {
     const video = videoRef.current;
     if (!video || userPausedRef.current) return;
+
+    video.volume = 1;
+    video.muted = false;
     try {
       await video.play();
       setIsPlaying(true);
+      setIsMuted(false);
+      return;
     } catch {
-      // Autoplay may be blocked; cover image stays visible
+      // Browsers block audible autoplay until the page has been interacted with
+    }
+
+    video.muted = true;
+    try {
+      await video.play();
+      setIsPlaying(true);
+      setIsMuted(true);
+    } catch {
+      // Playback blocked entirely; cover image stays visible
     }
   }, []);
 
@@ -97,15 +112,26 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
     if (!video) return;
 
     if (!video.paused) {
+      // A click counts as the gesture that unlocks audio
+      if (video.muted) {
+        video.muted = false;
+        video.volume = 1;
+        setIsMuted(false);
+        return;
+      }
+
       userPausedRef.current = true;
       pauseVideo();
       return;
     }
 
     userPausedRef.current = false;
+    video.volume = 1;
+    video.muted = false;
     try {
       await video.play();
       setIsPlaying(true);
+      setIsMuted(false);
     } catch {
       // Ignore play failures from gesture/policy
     }
@@ -151,8 +177,10 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
           tabIndex={0}
           aria-label={
             isPlaying
-              ? "Pause intro video"
-              : "Play intro video"
+              ? isMuted
+                ? "Turn on intro video sound"
+                : "Pause intro video"
+              : "Play intro video with sound"
           }
           onClick={handleClick}
           onKeyDown={(e) => {
@@ -177,13 +205,15 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
             ref={videoRef}
             src={INTRO_VIDEO_SRC}
             poster={PROFILE_POSTER}
-            muted
             loop
             playsInline
             preload="metadata"
             controls={false}
             disablePictureInPicture
-            className="absolute inset-0 h-full w-full object-cover object-top scale-[1.3] transition-transform duration-700 ease-out filter contrast-125 saturate-110"
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+            onVolumeChange={(e) => setIsMuted(e.currentTarget.muted)}
+            className="absolute inset-0 h-full w-full object-cover object-center scale-100 transition-transform duration-700 ease-out filter contrast-125 saturate-110"
           />
 
           {/* Same profile cover while paused */}
@@ -199,6 +229,14 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
           />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+          {/* Shown only when the browser blocked audio until a click */}
+          {isPlaying && isMuted && (
+            <div className="absolute top-6 left-1/2 -translate-x-1/2 flex items-center gap-1.5 rounded-full border border-white/20 bg-black/60 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white/80 backdrop-blur-md z-20 pointer-events-none">
+              <VolumeX size={12} />
+              Tap for sound
+            </div>
+          )}
         </div>
 
         {/* Floating "Available" Badge */}

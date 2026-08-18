@@ -14,6 +14,18 @@ type ProfileCardProps = {
   compact?: boolean;
 };
 
+/**
+ * The desktop and mobile cards are both mounted at all times and only hidden
+ * with breakpoint classes, so this keeps a single intro video audible.
+ */
+let activeVideo: HTMLVideoElement | null = null;
+
+const isRendered = (el: HTMLElement | null) => {
+  if (!el) return false;
+  const { width, height } = el.getBoundingClientRect();
+  return width > 0 && height > 0;
+};
+
 export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
@@ -24,7 +36,10 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
   const playVideo = useCallback(async () => {
     const video = videoRef.current;
     if (!video || userPausedRef.current) return;
+    if (!isRendered(mediaRef.current)) return;
+    if (activeVideo && activeVideo !== video && !activeVideo.paused) return;
 
+    activeVideo = video;
     video.volume = 1;
     video.muted = false;
     try {
@@ -41,6 +56,7 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
       setIsPlaying(true);
     } catch {
       // Playback blocked entirely; cover image stays visible
+      if (activeVideo === video) activeVideo = null;
     }
   }, []);
 
@@ -49,6 +65,7 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
     if (!video) return;
     video.pause();
     setIsPlaying(false);
+    if (activeVideo === video) activeVideo = null;
   }, []);
 
   // Restore sound as soon as the page gets any interaction that unlocks audio
@@ -84,6 +101,7 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
   // Mobile: autoplay when profile card or About section is in view
   useEffect(() => {
     if (!isCoarsePointer) return;
+    if (!isRendered(mediaRef.current)) return;
 
     const targets = [mediaRef.current, document.getElementById("about")].filter(
       Boolean,
@@ -137,6 +155,8 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
     }
 
     userPausedRef.current = false;
+    if (activeVideo && activeVideo !== video) activeVideo.pause();
+    activeVideo = video;
     video.volume = 1;
     video.muted = false;
     try {

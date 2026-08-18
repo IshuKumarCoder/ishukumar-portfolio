@@ -1,9 +1,13 @@
 "use client";
 
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { TiltCard } from "./TiltCard";
 import { Code2, Sparkles, Terminal } from "lucide-react";
+
+const INTRO_VIDEO_SRC = "/introvideo/intro.mp4";
+const PROFILE_POSTER = "/profile_pic.png";
 
 type ProfileCardProps = {
   /** Tighter layout for the mobile section between Hero and About */
@@ -11,6 +15,102 @@ type ProfileCardProps = {
 };
 
 export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const mediaRef = useRef<HTMLDivElement>(null);
+  const userPausedRef = useRef(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isCoarsePointer, setIsCoarsePointer] = useState(false);
+
+  const playVideo = useCallback(async () => {
+    const video = videoRef.current;
+    if (!video || userPausedRef.current) return;
+    try {
+      await video.play();
+      setIsPlaying(true);
+    } catch {
+      // Autoplay may be blocked; cover image stays visible
+    }
+  }, []);
+
+  const pauseVideo = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.pause();
+    setIsPlaying(false);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: none), (pointer: coarse)");
+    const update = () => setIsCoarsePointer(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  // Mobile: autoplay when profile card or About section is in view
+  useEffect(() => {
+    if (!isCoarsePointer) return;
+
+    const targets = [mediaRef.current, document.getElementById("about")].filter(
+      Boolean,
+    ) as Element[];
+
+    if (targets.length === 0) return;
+
+    const visible = new Set<Element>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) visible.add(entry.target);
+          else visible.delete(entry.target);
+        }
+
+        if (visible.size > 0) {
+          void playVideo();
+        } else {
+          userPausedRef.current = false;
+          pauseVideo();
+        }
+      },
+      { threshold: 0.25, rootMargin: "0px 0px -10% 0px" },
+    );
+
+    for (const el of targets) observer.observe(el);
+    return () => observer.disconnect();
+  }, [isCoarsePointer, playVideo, pauseVideo]);
+
+  const handleMouseEnter = () => {
+    if (isCoarsePointer) return;
+    userPausedRef.current = false;
+    void playVideo();
+  };
+
+  const handleMouseLeave = () => {
+    if (isCoarsePointer) return;
+    userPausedRef.current = false;
+    pauseVideo();
+  };
+
+  const handleClick = async () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (!video.paused) {
+      userPausedRef.current = true;
+      pauseVideo();
+      return;
+    }
+
+    userPausedRef.current = false;
+    try {
+      await video.play();
+      setIsPlaying(true);
+    } catch {
+      // Ignore play failures from gesture/policy
+    }
+  };
+
   return (
     <div
       className={`relative w-full mx-auto z-10 perspective-1000 ${
@@ -44,8 +144,27 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
           className="absolute inset-[-16px] rounded-full border border-accent/20 pointer-events-none"
         />
 
-        {/* Profile Image Wrapper */}
-        <div className="relative w-full aspect-square rounded-full overflow-hidden border-4 border-white/5 glass shadow-[0_0_40px_rgba(139,92,246,0.3)]">
+        {/* Profile media: image cover + intro video */}
+        <div
+          ref={mediaRef}
+          role="button"
+          tabIndex={0}
+          aria-label={
+            isPlaying
+              ? "Pause intro video"
+              : "Play intro video"
+          }
+          onClick={handleClick}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              void handleClick();
+            }
+          }}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="relative w-full aspect-square rounded-full overflow-hidden border-4 border-white/5 glass shadow-[0_0_40px_rgba(139,92,246,0.3)] cursor-pointer select-none"
+        >
           {/* Holographic Scan Effect */}
           <motion.div
             initial={{ top: "-100%" }}
@@ -53,16 +172,32 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
             transition={{ duration: 3, repeat: Infinity, ease: "linear", delay: 1 }}
             className="absolute left-0 w-full h-8 bg-gradient-to-b from-transparent via-accent/40 to-transparent z-20 pointer-events-none"
           />
-          
+
+          <video
+            ref={videoRef}
+            src={INTRO_VIDEO_SRC}
+            poster={PROFILE_POSTER}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            controls={false}
+            disablePictureInPicture
+            className="absolute inset-0 h-full w-full object-cover object-top scale-[1.3] transition-transform duration-700 ease-out filter contrast-125 saturate-110"
+          />
+
+          {/* Same profile cover while paused */}
           <Image
-            src="/profile_pic.png"
+            src={PROFILE_POSTER}
             alt="Ishu Kumar - Full Stack Developer"
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover object-top scale-[1.3] hover:scale-[1.4] transition-transform duration-700 ease-out filter contrast-125 saturate-110"
+            className={`object-cover object-top scale-[1.3] transition-opacity duration-500 ease-out filter contrast-125 saturate-110 pointer-events-none ${
+              isPlaying ? "opacity-0" : "opacity-100"
+            }`}
             priority
           />
-          
+
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
         </div>
 
@@ -72,7 +207,7 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, type: "spring" }}
           style={{ willChange: "transform, opacity" }}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap glass-panel px-4 py-2 rounded-full border border-green-500/30 flex items-center gap-2 shadow-[0_0_20px_rgba(34,197,94,0.3)] z-30"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap glass-panel px-4 py-2 rounded-full border border-green-500/30 flex items-center gap-2 shadow-[0_0_20px_rgba(34,197,94,0.3)] z-30 pointer-events-none"
         >
           <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
           <span className="text-xs font-bold text-green-400 tracking-wider uppercase">Open to Freelance</span>
@@ -83,7 +218,7 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           style={{ willChange: "transform" }}
-          className={`absolute glass-panel p-2 sm:p-3 rounded-2xl border border-primary/30 shadow-lg z-30 ${
+          className={`absolute glass-panel p-2 sm:p-3 rounded-2xl border border-primary/30 shadow-lg z-30 pointer-events-none ${
             compact
               ? "top-6 left-0 sm:top-12 sm:-left-4"
               : "top-12 -left-6"
@@ -97,7 +232,7 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
           animate={{ y: [0, 15, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           style={{ willChange: "transform" }}
-          className={`absolute glass-panel p-2 sm:p-3 rounded-2xl border border-accent/30 shadow-lg z-30 ${
+          className={`absolute glass-panel p-2 sm:p-3 rounded-2xl border border-accent/30 shadow-lg z-30 pointer-events-none ${
             compact
               ? "top-20 right-0 sm:top-32 sm:-right-6"
               : "top-32 -right-8"
@@ -111,7 +246,7 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
           style={{ willChange: "transform" }}
-          className={`absolute glass-panel p-2 sm:p-3 rounded-2xl border border-purple-500/30 shadow-lg z-30 ${
+          className={`absolute glass-panel p-2 sm:p-3 rounded-2xl border border-purple-500/30 shadow-lg z-30 pointer-events-none ${
             compact
               ? "bottom-20 left-0 sm:bottom-24 sm:-left-6"
               : "bottom-24 -left-8"

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { TiltCard } from "./TiltCard";
-import { Code2, Sparkles, Terminal, VolumeX } from "lucide-react";
+import { Code2, Sparkles, Terminal } from "lucide-react";
 
 const INTRO_VIDEO_SRC = "/introvideo/intro.mp4";
 const PROFILE_POSTER = "/profile_pic.png";
@@ -19,7 +19,6 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
   const mediaRef = useRef<HTMLDivElement>(null);
   const userPausedRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
   const [isCoarsePointer, setIsCoarsePointer] = useState(false);
 
   const playVideo = useCallback(async () => {
@@ -31,7 +30,6 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
     try {
       await video.play();
       setIsPlaying(true);
-      setIsMuted(false);
       return;
     } catch {
       // Browsers block audible autoplay until the page has been interacted with
@@ -41,7 +39,6 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
     try {
       await video.play();
       setIsPlaying(true);
-      setIsMuted(true);
     } catch {
       // Playback blocked entirely; cover image stays visible
     }
@@ -52,6 +49,28 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
     if (!video) return;
     video.pause();
     setIsPlaying(false);
+  }, []);
+
+  // Restore sound as soon as the page gets any interaction that unlocks audio
+  useEffect(() => {
+    const events = ["pointerdown", "keydown", "touchstart"] as const;
+
+    const unmute = () => {
+      const video = videoRef.current;
+      if (video?.muted) {
+        video.muted = false;
+        video.volume = 1;
+      }
+      for (const event of events) document.removeEventListener(event, unmute);
+    };
+
+    for (const event of events) {
+      document.addEventListener(event, unmute, { passive: true });
+    }
+
+    return () => {
+      for (const event of events) document.removeEventListener(event, unmute);
+    };
   }, []);
 
   useEffect(() => {
@@ -112,14 +131,6 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
     if (!video) return;
 
     if (!video.paused) {
-      // A click counts as the gesture that unlocks audio
-      if (video.muted) {
-        video.muted = false;
-        video.volume = 1;
-        setIsMuted(false);
-        return;
-      }
-
       userPausedRef.current = true;
       pauseVideo();
       return;
@@ -131,7 +142,6 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
     try {
       await video.play();
       setIsPlaying(true);
-      setIsMuted(false);
     } catch {
       // Ignore play failures from gesture/policy
     }
@@ -175,13 +185,7 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
           ref={mediaRef}
           role="button"
           tabIndex={0}
-          aria-label={
-            isPlaying
-              ? isMuted
-                ? "Turn on intro video sound"
-                : "Pause intro video"
-              : "Play intro video with sound"
-          }
+          aria-label={isPlaying ? "Pause intro video" : "Play intro video"}
           onClick={handleClick}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -212,8 +216,7 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
             disablePictureInPicture
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
-            onVolumeChange={(e) => setIsMuted(e.currentTarget.muted)}
-            className="absolute inset-0 h-full w-full object-cover object-center scale-100 transition-transform duration-700 ease-out filter contrast-125 saturate-110"
+            className="absolute inset-0 h-full w-full object-cover object-top scale-100 transition-transform duration-700 ease-out filter contrast-125 saturate-110"
           />
 
           {/* Same profile cover while paused */}
@@ -229,14 +232,6 @@ export const ProfileCard = ({ compact = false }: ProfileCardProps) => {
           />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
-
-          {/* Shown only when the browser blocked audio until a click */}
-          {isPlaying && isMuted && (
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 flex items-center gap-1.5 rounded-full border border-white/20 bg-black/60 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white/80 backdrop-blur-md z-20 pointer-events-none">
-              <VolumeX size={12} />
-              Tap for sound
-            </div>
-          )}
         </div>
 
         {/* Floating "Available" Badge */}
